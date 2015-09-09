@@ -1,2 +1,2 @@
 # MultiTypeListViewAdapter
-简化多个type的ListView Adapter，将每个type的相关逻辑提取出来，方便复用，解耦。
+简化多个type的ListView Adapter，每个type view的创建更新提取出来。也同时封装了ViewHolder模式。
