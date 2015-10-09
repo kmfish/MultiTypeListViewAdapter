@@ -87,6 +87,7 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
             return items.get(position);
         }
 
+
         return null;
     }
 
