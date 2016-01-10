@@ -14,7 +14,4 @@ public interface ListItem {
     boolean isEnabled();
 
     boolean isSelected();
-
-    int getViewType();
-
 }

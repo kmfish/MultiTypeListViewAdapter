@@ -14,8 +14,8 @@ public class LineListItem1 extends BaseListItem {
 
     private String line;
 
-    public LineListItem1(Context mContext, int viewType, String line) {
-        super(mContext, viewType);
+    public LineListItem1(Context mContext, String line) {
+        super(mContext);
         this.line = line;
     }
 

@@ -19,11 +19,6 @@ public abstract class BaseMultiTypeAdapter extends BaseAdapter {
     public abstract ListItem getItem(int position);
 
     @Override
-    public int getItemViewType(int position) {
-        return getItem(position).getViewType();
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         final ListItem item = getItem(position);

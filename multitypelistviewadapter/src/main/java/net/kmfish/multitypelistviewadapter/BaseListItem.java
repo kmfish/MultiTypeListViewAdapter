@@ -11,22 +11,15 @@ import android.view.ViewGroup;
 public abstract class BaseListItem implements ListItem {
 
     protected Context mContext;
-    protected int viewType;
     protected boolean isSelected;
 
     public BaseListItem(Context mContext) {
         this.mContext = mContext;
     }
 
-    public BaseListItem(Context mContext, int viewType) {
-        this.mContext = mContext;
-        this.viewType = viewType;
-    }
-
     protected Context getContext() {
         return mContext;
     }
-
 
     protected abstract ViewHolder onCreateViewHolder(View itemView);
 
@@ -41,11 +34,6 @@ public abstract class BaseListItem implements ListItem {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public int getViewType() {
-        return viewType;
     }
 
     @Override

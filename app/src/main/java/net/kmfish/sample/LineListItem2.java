@@ -15,8 +15,8 @@ public class LineListItem2 extends BaseListItem {
 
     private String line;
 
-    public LineListItem2(Context mContext, int viewType, String line) {
-        super(mContext, viewType);
+    public LineListItem2(Context mContext, String line) {
+        super(mContext);
         this.line = line;
     }
 
@@ -35,7 +35,6 @@ public class LineListItem2 extends BaseListItem {
         LineViewHolder2 h = (LineViewHolder2) holder;
         h.text.setText(line + "_" + pos);
         h.img.setImageResource(R.drawable.icon_git);
-
     }
 
     private class LineViewHolder2 extends ViewHolder {

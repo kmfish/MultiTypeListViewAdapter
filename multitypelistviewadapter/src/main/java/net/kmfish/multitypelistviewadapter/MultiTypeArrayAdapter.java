@@ -1,5 +1,8 @@
 package net.kmfish.multitypelistviewadapter;
 
+import android.support.v4.util.SparseArrayCompat;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,22 +12,22 @@ import java.util.List;
  */
 public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
 
+    public static final String TAG = MultiTypeArrayAdapter.class.getSimpleName();
+
     private boolean mNotifyOnChange = true;
     private final Object mLock = new Object();
     private List<ListItem> items = new ArrayList<>();
-    private int typeCount;
+    private final int typeCount;
+    private SparseArrayCompat<Class> itemTypeClasses = new SparseArrayCompat<>();
 
     public MultiTypeArrayAdapter(int typeCount) {
-        this.typeCount = typeCount;
-    }
-
-    public void setTypeCount(int typeCount) {
         this.typeCount = typeCount;
     }
 
     public void addItem(ListItem item) {
         synchronized (mLock) {
             items.add(item);
+            addItemTypeClasses(item.getClass());
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -32,6 +35,9 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
     public void addItems(List<ListItem> items) {
         synchronized (mLock) {
             this.items.addAll(items);
+            for (ListItem item : items) {
+                addItemTypeClasses(item.getClass());
+            }
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -39,6 +45,9 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
     public void addItems(ListItem... items) {
         synchronized (mLock) {
             Collections.addAll(this.items, items);
+            for (int i = 0; i < items.length; i++) {
+                addItemTypeClasses(items[i].getClass());
+            }
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -46,6 +55,7 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
     public void insert(ListItem item, int index) {
         synchronized (mLock) {
             items.add(index, item);
+            addItemTypeClasses(item.getClass());
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -87,17 +97,35 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
             return items.get(position);
         }
 
-
         return null;
     }
 
     @Override
+    public int getItemViewType(int position) {
+        ListItem item = getItem(position);
+        if (null != item) {
+            int type = itemTypeClasses.indexOfValue(item.getClass());
+            Log.d(TAG, "getItemViewType pos:" + position + " type:" + type);
+            return type;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
     public int getViewTypeCount() {
-        return typeCount;
+        return typeCount <= 0 ? 1 : typeCount;
     }
 
     @Override
     public long getItemId(int position) {
         return position;
     }
+
+    private void addItemTypeClasses(Class itemClz) {
+        if (itemTypeClasses.indexOfValue(itemClz) == -1) {
+            itemTypeClasses.append(itemTypeClasses.size(), itemClz);
+        }
+    }
+
 }
