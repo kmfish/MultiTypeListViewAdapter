@@ -3,4 +3,4 @@
 
 blog:
 
-https://www.zybuluo.com/kmfish/note/171565
+http://kmfish.net/2016/01/16/MultiTypeListViewAdapter/
