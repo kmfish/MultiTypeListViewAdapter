@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-//        adapter.setTypeCount(ITEM_TYPE_COUNT);
         LineListItem1 item1 = new LineListItem1(this, "line type 1");
         LineListItem2 item2 = new LineListItem2(this, "line type 2");
 
