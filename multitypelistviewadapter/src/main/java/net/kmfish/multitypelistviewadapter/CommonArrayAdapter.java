@@ -1,27 +1,27 @@
 package net.kmfish.multitypelistviewadapter;
 
 import android.support.v4.util.SparseArrayCompat;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by kmfish on 2015/9/9
+ * Created by lijun on 16/8/2.
  */
-public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
+public class CommonArrayAdapter implements IArrayAdapter {
 
-    public static final String TAG = MultiTypeArrayAdapter.class.getSimpleName();
+    public static final String TAG = CommonArrayAdapter.class.getSimpleName();
 
     private boolean mNotifyOnChange = true;
     private final Object mLock = new Object();
     private List<ListItem> items = new ArrayList<>();
-    private final int typeCount;
     private SparseArrayCompat<Class> itemTypeClasses = new SparseArrayCompat<>();
 
-    public MultiTypeArrayAdapter(int typeCount) {
-        this.typeCount = typeCount;
+    private NotifyDataSetChangedListener listener;
+
+    public void setListener(NotifyDataSetChangedListener listener) {
+        this.listener = listener;
     }
 
     public void addItem(ListItem item) {
@@ -76,22 +76,25 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
         if (mNotifyOnChange) notifyDataSetChanged();
     }
 
-    @Override
     public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
         mNotifyOnChange = true;
+        if (null != listener) {
+            listener.notifyDataSetChanged();
+        }
+    }
+
+    public interface NotifyDataSetChangedListener {
+        void notifyDataSetChanged();
     }
 
     public void setNotifyOnChange(boolean notifyOnChange) {
         mNotifyOnChange = notifyOnChange;
     }
 
-    @Override
     public int getCount() {
         return items.size();
     }
 
-    @Override
     public ListItem getItem(int position) {
         if (position >= 0 && position < items.size()) {
             return items.get(position);
@@ -101,25 +104,30 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getTypeCount() {
+        return itemTypeClasses.size();
+    }
+
+    public List<ListItem> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+
+    public Class<? extends ListItem> getItemClass(int viewType) {
+        return itemTypeClasses.get(viewType);
+    }
+
+    public int getItemType(int position) {
         ListItem item = getItem(position);
         if (null != item) {
-            int type = itemTypeClasses.indexOfValue(item.getClass());
-            Log.d(TAG, "getItemViewType pos:" + position + " type:" + type);
-            return type;
-        } else {
-            return 0;
+            return getItemType(item);
         }
+
+        return -1;
     }
 
-    @Override
-    public int getViewTypeCount() {
-        return typeCount <= 0 ? 1 : typeCount;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public int getItemType(ListItem item) {
+        int type = itemTypeClasses.indexOfValue(item.getClass());
+        return type;
     }
 
     private void addItemTypeClasses(Class itemClz) {
@@ -127,5 +135,4 @@ public class MultiTypeArrayAdapter extends BaseMultiTypeAdapter {
             itemTypeClasses.append(itemTypeClasses.size(), itemClz);
         }
     }
-
 }

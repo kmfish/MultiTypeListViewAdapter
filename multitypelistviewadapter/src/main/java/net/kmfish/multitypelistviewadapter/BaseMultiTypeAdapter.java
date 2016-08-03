@@ -8,15 +8,7 @@ import android.widget.BaseAdapter;
 /**
  * Created by kmfish on 2015/9/9
  */
-public abstract class BaseMultiTypeAdapter extends BaseAdapter {
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    @Override
-    public abstract ListItem getItem(int position);
+public abstract class BaseMultiTypeAdapter extends BaseAdapter implements RecyclerAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -50,4 +42,5 @@ public abstract class BaseMultiTypeAdapter extends BaseAdapter {
 
         return super.isEnabled(position);
     }
+
 }

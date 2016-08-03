@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 /**
  * Created by kmfish on 2015/9/9.
  */
-public abstract class BaseListItem implements ListItem {
+public abstract class BaseListItem<T> implements ListItem<T> {
 
     protected Context mContext;
     protected boolean isSelected;
+
+    private T data;
 
     public BaseListItem(Context mContext) {
         this.mContext = mContext;
@@ -43,5 +45,15 @@ public abstract class BaseListItem implements ListItem {
 
     public void setSelected(boolean isSelected) {
         this.isSelected = isSelected;
+    }
+
+    @Override
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    @Override
+    public T getData() {
+        return data;
     }
 }

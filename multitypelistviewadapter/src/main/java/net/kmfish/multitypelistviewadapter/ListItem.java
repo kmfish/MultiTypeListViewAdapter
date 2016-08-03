@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 /**
  * Created by kmfish on 2015/9/9
  */
-public interface ListItem {
+public interface ListItem<T> {
 
     ViewHolder createViewHolder(ViewGroup group);
 
@@ -14,4 +14,8 @@ public interface ListItem {
     boolean isEnabled();
 
     boolean isSelected();
+
+    T getData();
+
+    void setData(T data);
 }

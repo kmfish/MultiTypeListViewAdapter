@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
-import net.kmfish.multitypelistviewadapter.MultiTypeArrayAdapter;
+import net.kmfish.multitypelistviewadapter.BaseListAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
-    private MultiTypeArrayAdapter adapter;
+    private BaseListAdapter adapter;
     private static final int ITEM_TYPE_COUNT = 2;
 
     @Override
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new MultiTypeArrayAdapter(ITEM_TYPE_COUNT);
+        adapter = new BaseListAdapter(ITEM_TYPE_COUNT);
         listView.setAdapter(adapter);
         setupAdapter();
     }
