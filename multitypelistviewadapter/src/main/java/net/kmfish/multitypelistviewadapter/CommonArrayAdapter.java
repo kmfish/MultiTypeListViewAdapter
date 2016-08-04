@@ -1,8 +1,5 @@
 package net.kmfish.multitypelistviewadapter;
 
-import android.support.v4.util.SparseArrayCompat;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,8 +14,8 @@ public class CommonArrayAdapter implements IArrayAdapter {
     private boolean mNotifyOnChange = true;
     private final Object mLock = new Object();
     private List<ListItem> items = new ArrayList<>();
-    private SparseArrayCompat<Class> itemTypeClasses = new SparseArrayCompat<>();
 
+    private ListItemTypeHelper helper = new ListItemTypeHelper();
     private NotifyDataSetChangedListener listener;
 
     public CommonArrayAdapter(NotifyDataSetChangedListener listener) {
@@ -28,7 +25,6 @@ public class CommonArrayAdapter implements IArrayAdapter {
     public void addItem(ListItem item) {
         synchronized (mLock) {
             items.add(item);
-            addItemTypeClasses(item.getClass());
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -37,7 +33,6 @@ public class CommonArrayAdapter implements IArrayAdapter {
         synchronized (mLock) {
             this.items.addAll(items);
             for (ListItem item : items) {
-                addItemTypeClasses(item.getClass());
             }
         }
         if (mNotifyOnChange) notifyDataSetChanged();
@@ -47,7 +42,6 @@ public class CommonArrayAdapter implements IArrayAdapter {
         synchronized (mLock) {
             Collections.addAll(this.items, items);
             for (int i = 0; i < items.length; i++) {
-                addItemTypeClasses(items[i].getClass());
             }
         }
         if (mNotifyOnChange) notifyDataSetChanged();
@@ -56,7 +50,6 @@ public class CommonArrayAdapter implements IArrayAdapter {
     public void insert(ListItem item, int index) {
         synchronized (mLock) {
             items.add(index, item);
-            addItemTypeClasses(item.getClass());
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -104,17 +97,12 @@ public class CommonArrayAdapter implements IArrayAdapter {
         return null;
     }
 
-    public int getTypeCount() {
-        Log.d("Adapter", "getTypeCount");
-        return Math.max(1,itemTypeClasses.size());
-    }
-
     public List<ListItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
     public Class<? extends ListItem> getItemClass(int viewType) {
-        return itemTypeClasses.get(viewType);
+        return helper.getItemClass(viewType);
     }
 
     public int getItemType(int position) {
@@ -127,13 +115,6 @@ public class CommonArrayAdapter implements IArrayAdapter {
     }
 
     public int getItemType(ListItem item) {
-        int type = itemTypeClasses.indexOfValue(item.getClass());
-        return type;
-    }
-
-    private void addItemTypeClasses(Class itemClz) {
-        if (itemTypeClasses.indexOfValue(itemClz) == -1) {
-            itemTypeClasses.append(itemTypeClasses.size(), itemClz);
-        }
+       return helper.getType(item.getClass());
     }
 }

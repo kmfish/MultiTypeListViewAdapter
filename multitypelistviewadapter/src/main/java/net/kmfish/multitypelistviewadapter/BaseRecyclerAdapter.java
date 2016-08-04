@@ -34,6 +34,7 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
             for (ListItem item : items) {
                 if (item.getClass().equals(itemClass)) {
                     target = item;
+                    break;
                 }
             }
         }
