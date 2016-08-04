@@ -1,6 +1,7 @@
 package net.kmfish.sample.listitem;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class LineListItem2 extends BaseListItem<ImageModel> {
     @Override
     public void updateView(ImageModel model, int pos) {
         if (null != model) {
+            Log.d("item2", "updateView model:" + model + "pos:" + pos);
             text.setText(model.getName());
             img.setImageResource(model.getImgResId());
         }

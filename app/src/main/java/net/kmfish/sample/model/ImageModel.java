@@ -27,4 +27,12 @@ public class ImageModel {
     public void setImgResId(int imgResId) {
         this.imgResId = imgResId;
     }
+
+    @Override
+    public String toString() {
+        return "ImageModel{" +
+                "name='" + name + '\'' +
+                ", imgResId=" + imgResId +
+                '}';
+    }
 }

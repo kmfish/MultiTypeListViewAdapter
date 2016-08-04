@@ -1,6 +1,6 @@
 # MultiTypeListViewAdapter Android ListView Adapter 封装
 
-## [MultiTypeListViewAdapter](https://github.com/kmfish/MultiTypeListViewAdapter) 是什么？
+## [MultiTypeListViewAdapter](https://github.com/kmfish/MultiTypeListViewAdapter)
 
 ## 背景
 - Adapter实现多type的模式,代码不便于维护
@@ -13,7 +13,8 @@
 ## 特点
 1. 基于ListItem 的复用,item的数据和代码更加内聚,提高可维护性.
 2. 支持多种类型Item,以item的class自动计算item type.
-2. 支持ListView, RecyclerView的Adapter
+3. 支持同时存在多种Model类型,由具体的Item确定.
+3. 支持ListView, RecyclerView的Adapter
 
 ## 使用
 ```java

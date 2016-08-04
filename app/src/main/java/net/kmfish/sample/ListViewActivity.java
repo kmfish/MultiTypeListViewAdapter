@@ -30,20 +30,20 @@ public class ListViewActivity extends Activity {
     }
 
     private void setupAdapter() {
-        LineListItem1 item1 = new LineListItem1(this, getTextModel());
-        LineListItem2 item2 = new LineListItem2(this, getImageModel());
-
         adapter.setNotifyOnChange(false);
-        for (int i = 0, len = 15; i < len; i++) {
+        for (int i = 0, len = 30; i < len; i++) {
+            LineListItem1 item1 = new LineListItem1(this, getTextModel(i));
+            LineListItem2 item2 = new LineListItem2(this, getImageModel(i));
+
             adapter.addItem( i  % 2 == 0 ? item1 : item2);
         }
         adapter.notifyDataSetChanged();
     }
 
-    private TextModel getTextModel() {
-        return new TextModel("The name", "This is a desc text.");
+    private TextModel getTextModel(int i) {
+        return new TextModel("The name:" + i, "This is a desc text.");
     }
 
-    private ImageModel getImageModel() {
-        return new ImageModel("github", R.drawable.icon_git);
+    private ImageModel getImageModel(int i) {
+        return new ImageModel("github:" + i, R.drawable.icon_git);
     }}

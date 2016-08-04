@@ -63,6 +63,14 @@ public class CommonArrayAdapter implements IArrayAdapter {
         if (mNotifyOnChange) notifyDataSetChanged();
     }
 
+    @Override
+    public void remove(int pos) {
+        synchronized (mLock) {
+            items.remove(pos);
+        }
+        if (mNotifyOnChange) notifyDataSetChanged();
+    }
+
     public void clear() {
         synchronized (mLock) {
             items.clear();

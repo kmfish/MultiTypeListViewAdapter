@@ -1,6 +1,5 @@
 package net.kmfish.multitypelistviewadapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,12 @@ public abstract class BaseMultiTypeAdapter extends BaseAdapter implements IArray
             convertView = mInflater.inflate(item.onGetLayoutRes(), parent, false);
             convertView.setTag(item);
             item.bindViews(convertView);
-            Log.d("BaseMultiTypeAdapter", "bindViews pos:" + position + " convertView:" + convertView);
         } else {
             item = (ListItem) convertView.getTag();
-            Log.d("BaseMultiTypeAdapter", "getTag pos:" + position + " convertView:" + convertView);
         }
 
-        item.updateView(item.getData(), position);
+        ListItem dataItem = getItem(position);
+        item.updateView(dataItem.getData(), position);
         return convertView;
     }
 

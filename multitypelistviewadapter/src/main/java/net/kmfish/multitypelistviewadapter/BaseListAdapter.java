@@ -69,6 +69,11 @@ public class BaseListAdapter extends BaseMultiTypeAdapter implements CommonArray
     }
 
     @Override
+    public void remove(int pos) {
+        arrayAdapter.remove(pos);
+    }
+
+    @Override
     public void clear() {
         arrayAdapter.clear();
     }

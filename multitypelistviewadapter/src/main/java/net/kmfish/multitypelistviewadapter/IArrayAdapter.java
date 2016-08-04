@@ -17,6 +17,8 @@ public interface IArrayAdapter {
 
     void remove(ListItem object);
 
+    void remove(int pos);
+
     void clear();
 
     void setNotifyOnChange(boolean notifyOnChange);

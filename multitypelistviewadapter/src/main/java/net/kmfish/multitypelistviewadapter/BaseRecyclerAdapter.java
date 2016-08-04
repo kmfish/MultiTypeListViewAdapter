@@ -2,11 +2,12 @@ package net.kmfish.multitypelistviewadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by lijun on 16/8/2.
@@ -16,6 +17,8 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
     private static final String TAG = BaseRecyclerAdapter.class.getSimpleName();
 
     private CommonArrayAdapter arrayAdapter;
+
+    private Set<ListItem> bindItemSet = new HashSet<>(); // 已经绑定过的Item集合
 
     public BaseRecyclerAdapter() {
         this.arrayAdapter = new CommonArrayAdapter(this);
@@ -32,7 +35,7 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
         List<ListItem> items = arrayAdapter.getItems();
         if (null != items && items.size() > 0) {
             for (ListItem item : items) {
-                if (item.getClass().equals(itemClass)) {
+                if (!bindItemSet.contains(item) && item.getClass().equals(itemClass)) {
                     target = item;
                     break;
                 }
@@ -43,15 +46,17 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
             throw new RuntimeException("list item is never null.");
         }
 
-        Log.d(TAG, "onCreateViewHolder viewType:" + viewType);
-        return new InnerViewHolder(parent.getContext(), parent, target);
+        InnerViewHolder holder = new InnerViewHolder(parent.getContext(), parent, target);
+        bindItemSet.add(target);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ListItem item = ((InnerViewHolder)holder).item;
         if (null != item) {
-            item.updateView(item.getData(), position);
+            ListItem dataItem = getItem(position);
+            item.updateView(dataItem.getData(), position);
         }
     }
 
@@ -88,11 +93,19 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
     @Override
     public void remove(ListItem object) {
         arrayAdapter.remove(object);
+        bindItemSet.remove(object);
+    }
+
+    @Override
+    public void remove(int pos) {
+        arrayAdapter.remove(pos);
+        bindItemSet.remove(getItem(pos));
     }
 
     @Override
     public void clear() {
         arrayAdapter.clear();
+        bindItemSet.clear();
     }
 
     @Override
