@@ -19,9 +19,9 @@ public interface IArrayAdapter {
 
     void clear();
 
+    void setNotifyOnChange(boolean notifyOnChange);
+
     void notifyDataSetChanged();
 
     ListItem getItem(int position);
-
-    int getTypeCount();
 }

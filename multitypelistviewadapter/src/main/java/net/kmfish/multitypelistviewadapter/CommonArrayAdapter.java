@@ -1,6 +1,7 @@
 package net.kmfish.multitypelistviewadapter;
 
 import android.support.v4.util.SparseArrayCompat;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class CommonArrayAdapter implements IArrayAdapter {
 
     private NotifyDataSetChangedListener listener;
 
-    public void setListener(NotifyDataSetChangedListener listener) {
+    public CommonArrayAdapter(NotifyDataSetChangedListener listener) {
         this.listener = listener;
     }
 
@@ -103,9 +104,9 @@ public class CommonArrayAdapter implements IArrayAdapter {
         return null;
     }
 
-    @Override
     public int getTypeCount() {
-        return itemTypeClasses.size();
+        Log.d("Adapter", "getTypeCount");
+        return Math.max(1,itemTypeClasses.size());
     }
 
     public List<ListItem> getItems() {

@@ -1,6 +1,7 @@
 package net.kmfish.multitypelistviewadapter;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,28 +9,29 @@ import android.widget.BaseAdapter;
 /**
  * Created by kmfish on 2015/9/9
  */
-public abstract class BaseMultiTypeAdapter extends BaseAdapter implements RecyclerAdapter {
+public abstract class BaseMultiTypeAdapter extends BaseAdapter implements IArrayAdapter {
+
+    private LayoutInflater mInflater;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final ViewHolder holder;
-        final ListItem item = getItem(position);
-
-        if (null == item) {
-            throw new RuntimeException("list item is never null. pos:" + position);
+        if (null == mInflater) {
+            mInflater = LayoutInflater.from(parent.getContext());
         }
 
+        ListItem item;
         if (null == convertView) {
-            holder = item.createViewHolder(parent);
-            convertView = holder.itemView;
-            convertView.setTag(holder);
-            Log.d("BaseMultiTypeAdapter", "createView pos:" + position + " convertView:" + convertView + " holder:" + holder);
+            item = getItem(position);
+            convertView = mInflater.inflate(item.onGetLayoutRes(), parent, false);
+            convertView.setTag(item);
+            item.bindViews(convertView);
+            Log.d("BaseMultiTypeAdapter", "bindViews pos:" + position + " convertView:" + convertView);
         } else {
-            holder = (ViewHolder) convertView.getTag();
-            Log.d("BaseMultiTypeAdapter", "getTag pos:" + position + " convertView:" + convertView + " holder:" + holder);
+            item = (ListItem) convertView.getTag();
+            Log.d("BaseMultiTypeAdapter", "getTag pos:" + position + " convertView:" + convertView);
         }
 
-        item.updateHolder(holder, position);
+        item.updateView(item.getData(), position);
         return convertView;
     }
 

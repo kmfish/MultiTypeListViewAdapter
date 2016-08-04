@@ -1,38 +1,36 @@
 package net.kmfish.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ListView;
+import android.view.View;
 
-import net.kmfish.multitypelistviewadapter.BaseListAdapter;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-public class MainActivity extends AppCompatActivity {
-
-    private ListView listView;
-    private BaseListAdapter adapter;
-    private static final int ITEM_TYPE_COUNT = 2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        listView = (ListView) findViewById(R.id.listview);
-        adapter = new BaseListAdapter(ITEM_TYPE_COUNT);
-        listView.setAdapter(adapter);
-        setupAdapter();
+        findViewById(R.id.btnListView).setOnClickListener(this);
+        findViewById(R.id.btnRecyclerView).setOnClickListener(this);
     }
 
-    private void setupAdapter() {
-        LineListItem1 item1 = new LineListItem1(this, "line type 1");
-        LineListItem2 item2 = new LineListItem2(this, "line type 2");
-
-        adapter.setNotifyOnChange(false);
-        for (int i = 0, len = 50; i < len; i++) {
-            adapter.addItem( i  % 2 == 0 ? item1 : item2);
+    @Override
+    public void onClick(View v) {
+        Class clz = null;
+        switch (v.getId()) {
+            case R.id.btnListView:
+                clz = ListViewActivity.class;
+                break;
+            case R.id.btnRecyclerView:
+                clz = RecyclerViewActivity.class;
+                break;
+            default:
+                break;
         }
 
-        adapter.insert(item1, 6);
-        adapter.notifyDataSetChanged();
+        startActivity(new Intent(this, clz));
     }
 }

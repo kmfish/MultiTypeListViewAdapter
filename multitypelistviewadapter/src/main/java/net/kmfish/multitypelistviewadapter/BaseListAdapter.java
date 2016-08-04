@@ -5,20 +5,27 @@ import java.util.List;
 /**
  * Created by kmfish on 2015/9/9
  */
-public class BaseListAdapter extends BaseMultiTypeAdapter implements IArrayAdapter, CommonArrayAdapter.NotifyDataSetChangedListener {
+public class BaseListAdapter extends BaseMultiTypeAdapter implements CommonArrayAdapter.NotifyDataSetChangedListener {
 
     public static final String TAG = BaseListAdapter.class.getSimpleName();
 
     private CommonArrayAdapter arrayAdapter;
 
-    public BaseListAdapter() {
-        arrayAdapter = new CommonArrayAdapter();
-        arrayAdapter.setListener(this);
+    private int typeCount;
+
+    public BaseListAdapter(int typeCount) {
+        arrayAdapter = new CommonArrayAdapter(this);
+        this.typeCount = typeCount;
     }
 
     @Override
     public int getViewTypeCount() {
-        return arrayAdapter.getTypeCount();
+        return typeCount;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return arrayAdapter.getItemType(position);
     }
 
     @Override
@@ -35,12 +42,6 @@ public class BaseListAdapter extends BaseMultiTypeAdapter implements IArrayAdapt
     public ListItem getItem(int position) {
         return arrayAdapter.getItem(position);
     }
-
-    @Override
-    public int getTypeCount() {
-        return arrayAdapter.getTypeCount();
-    }
-
 
     @Override
     public void addItem(ListItem item) {
@@ -70,5 +71,10 @@ public class BaseListAdapter extends BaseMultiTypeAdapter implements IArrayAdapt
     @Override
     public void clear() {
         arrayAdapter.clear();
+    }
+
+    @Override
+    public void setNotifyOnChange(boolean notifyOnChange) {
+        arrayAdapter.setNotifyOnChange(notifyOnChange);
     }
 }

@@ -1,7 +1,9 @@
 package net.kmfish.multitypelistviewadapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -9,21 +11,18 @@ import java.util.List;
 /**
  * Created by lijun on 16/8/2.
  */
-public class BaseRecyclerAdapter extends RecyclerView.Adapter implements
-        RecyclerAdapter, IArrayAdapter, CommonArrayAdapter.NotifyDataSetChangedListener {
+public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayAdapter, CommonArrayAdapter.NotifyDataSetChangedListener {
 
     private static final String TAG = BaseRecyclerAdapter.class.getSimpleName();
 
     private CommonArrayAdapter arrayAdapter;
 
     public BaseRecyclerAdapter() {
-        this.arrayAdapter = new CommonArrayAdapter();
+        this.arrayAdapter = new CommonArrayAdapter(this);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final ViewHolder holder;
-
         Class<? extends ListItem> itemClass = arrayAdapter.getItemClass(viewType);
         if (null == itemClass) {
             return null;
@@ -41,21 +40,17 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements
 
         if (null == target) {
             throw new RuntimeException("list item is never null.");
-
         }
 
-        holder = target.createViewHolder(parent);
         Log.d(TAG, "onCreateViewHolder viewType:" + viewType);
-
-        return new InnerViewHolder(holder);
+        return new InnerViewHolder(parent.getContext(), parent, target);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ListItem item = arrayAdapter.getItem(position);
+        ListItem item = ((InnerViewHolder)holder).item;
         if (null != item) {
-            InnerViewHolder innerVH = (InnerViewHolder) holder;
-            item.updateHolder(innerVH.rawVH, position);
+            item.updateView(item.getData(), position);
         }
     }
 
@@ -100,22 +95,23 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements
     }
 
     @Override
-    public int getTypeCount() {
-        return arrayAdapter.getTypeCount();
-    }
-
-    @Override
     public ListItem getItem(int position) {
         return arrayAdapter.getItem(position);
     }
 
+    @Override
+    public void setNotifyOnChange(boolean notifyOnChange) {
+        arrayAdapter.setNotifyOnChange(notifyOnChange);
+    }
+
     private class InnerViewHolder extends RecyclerView.ViewHolder {
 
-        ViewHolder rawVH;
+        ListItem item;
 
-        public InnerViewHolder( ViewHolder viewHolder) {
-            super(viewHolder.itemView);
-            this.rawVH = viewHolder;
+        public InnerViewHolder(Context context, ViewGroup parent, ListItem item) {
+            super(LayoutInflater.from(context).inflate(item.onGetLayoutRes(), parent, false));
+            this.item = item;
+            this.item.bindViews(itemView);
         }
     }
 }

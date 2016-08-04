@@ -1,15 +1,19 @@
 package net.kmfish.multitypelistviewadapter;
 
-import android.view.ViewGroup;
+import android.support.annotation.LayoutRes;
+import android.view.View;
 
 /**
  * Created by kmfish on 2015/9/9
  */
 public interface ListItem<T> {
 
-    ViewHolder createViewHolder(ViewGroup group);
+    @LayoutRes
+    int onGetLayoutRes();
 
-    void updateHolder(ViewHolder holder, int pos);
+    void bindViews(View convertView);
+
+    void updateView(T data, int pos);
 
     boolean isEnabled();
 
