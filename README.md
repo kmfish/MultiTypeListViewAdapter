@@ -14,7 +14,7 @@
 1. 基于ListItem 的复用,item的数据和代码更加内聚,提高可维护性.
 2. 支持多种类型Item,以item的class自动计算item type.
 3. 支持同时存在多种Model类型,由具体的Item确定.
-3. 支持ListView, RecyclerView的Adapter
+4. 支持ListView, RecyclerView的Adapter
 
 ## 使用
 ```java
