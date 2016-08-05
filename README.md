@@ -2,6 +2,8 @@
 
 ## [MultiTypeListViewAdapter](https://github.com/kmfish/MultiTypeListViewAdapter)
 
+[![](https://jitpack.io/v/kmfish/MultiTypeListViewAdapter.svg)](https://jitpack.io/#kmfish/MultiTypeListViewAdapter)
+
 ## 背景
 - Adapter实现多type的模式,代码不便于维护
 - 希望针对Item粒度的复用
