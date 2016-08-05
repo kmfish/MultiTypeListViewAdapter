@@ -16,6 +16,24 @@
 3. 支持同时存在多种Model类型,由具体的Item确定.
 4. 支持ListView, RecyclerView的Adapter
 
+## Install
+1. 在工程根目录的build.gradle中添加JitPack仓库地址 (注意:是在allprojects节点下)
+```
+allprojects {
+ repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+ }
+}
+```
+2. 在用到的module中添加依赖
+```
+dependencies {
+    compile 'com.github.kmfish:MultiTypeListViewAdapter:0.1.0'
+}
+```
+
+
 ## 使用
 ```java
 public class ListViewActivity extends Activity {
