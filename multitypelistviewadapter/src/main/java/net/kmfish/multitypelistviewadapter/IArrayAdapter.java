@@ -3,19 +3,19 @@ package net.kmfish.multitypelistviewadapter;
 import java.util.List;
 
 /**
- * Created by lijun on 16/8/3.
+ * Created by lijun on 16/8/5.
  */
 public interface IArrayAdapter {
 
-    void addItem(ListItem item);
+    void addData(Data item);
 
-    void addItems(List<ListItem> items);
+    void addDatas(List<Data> items);
 
-    void addItems(ListItem... items);
+    void addDatas(Data... items);
 
-    void insert(ListItem item, int index);
+    void insert(Data item, int index);
 
-    void remove(ListItem object);
+    void remove(Data object);
 
     void remove(int pos);
 
@@ -25,5 +25,5 @@ public interface IArrayAdapter {
 
     void notifyDataSetChanged();
 
-    ListItem getItem(int position);
+    Data getData(int position);
 }

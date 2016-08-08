@@ -1,53 +1,64 @@
 package net.kmfish.multitypelistviewadapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by lijun on 16/8/2.
  */
-public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayAdapter, CommonArrayAdapter.NotifyDataSetChangedListener {
+public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayAdapter, NotifyDataSetChangedListener {
 
     private static final String TAG = BaseRecyclerAdapter.class.getSimpleName();
 
-    private CommonArrayAdapter arrayAdapter;
+    private BaseArrayAdapter arrayAdapter;
 
-    private Set<ListItem> bindItemSet = new HashSet<>(); // 已经绑定过的Item集合
+    private LayoutInflater mInflater;
+
+    private ListItemFactory itemFactory = new ClassListItemFactory();
 
     public BaseRecyclerAdapter() {
-        this.arrayAdapter = new CommonArrayAdapter(this);
+        init();
+    }
+
+    private void init() {
+        this.arrayAdapter = new BaseArrayAdapter(this);
+    }
+
+    /**
+     * 初始化Adapter时调用此方法注册数据类型和Item类型的映射关系
+     * @param dataClz
+     * @param itemClz
+     */
+    public void registerDataAndItem(Class<?> dataClz, Class<? extends ListItem> itemClz) {
+        itemFactory.registerDataType(dataClz, itemClz);
+    }
+
+    private ListItem createListItem(Class<?> dataClz) {
+        ListItem item = itemFactory.create(dataClz);
+        return item;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Class<? extends ListItem> itemClass = arrayAdapter.getItemClass(viewType);
-        if (null == itemClass) {
+        if (null == mInflater) {
+            mInflater = LayoutInflater.from(parent.getContext());
+        }
+
+        Class<? extends Data> dataClz = arrayAdapter.getDataClass(viewType);
+        if (null == dataClz) {
             return null;
         }
 
-        ListItem target = null;
-        List<ListItem> items = arrayAdapter.getItems();
-        if (null != items && items.size() > 0) {
-            for (ListItem item : items) {
-                if (!bindItemSet.contains(item) && item.getClass().equals(itemClass)) {
-                    target = item;
-                    break;
-                }
-            }
+        ListItem item = createListItem(dataClz);
+        if (null == item) {
+            return null;
         }
 
-        if (null == target) {
-            throw new RuntimeException("list item is never null.");
-        }
-
-        InnerViewHolder holder = new InnerViewHolder(parent.getContext(), parent, target);
-        bindItemSet.add(target);
+        item.setContext(parent.getContext());
+        InnerViewHolder holder = new InnerViewHolder(parent, item);
         return holder;
     }
 
@@ -55,8 +66,13 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ListItem item = ((InnerViewHolder)holder).item;
         if (null != item) {
-            ListItem dataItem = getItem(position);
-            item.updateView(dataItem.getData(), position);
+            Data data = arrayAdapter.getData(position);
+            if (null != data) {
+                item.setData(data.getData());
+                item.updateView(data.getData(), position);
+            } else {
+                throw new RuntimeException("item data should not be null, pos:" + position);
+            }
         }
     }
 
@@ -71,46 +87,43 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
     }
 
     @Override
-    public void addItem(ListItem item) {
-        arrayAdapter.addItem(item);
+    public void addData(Data item) {
+        arrayAdapter.addData(item);
     }
 
     @Override
-    public void addItems(List<ListItem> items) {
-        arrayAdapter.addItems(items);
+    public void addDatas(List<Data> items) {
+        arrayAdapter.addDatas(items);
     }
 
     @Override
-    public void addItems(ListItem... items) {
-        arrayAdapter.addItems(items);
+    public void addDatas(Data... items) {
+        arrayAdapter.addDatas(items);
     }
 
     @Override
-    public void insert(ListItem item, int index) {
+    public void insert(Data item, int index) {
         arrayAdapter.insert(item, index);
     }
 
     @Override
-    public void remove(ListItem object) {
+    public void remove(Data object) {
         arrayAdapter.remove(object);
-        bindItemSet.remove(object);
     }
 
     @Override
     public void remove(int pos) {
         arrayAdapter.remove(pos);
-        bindItemSet.remove(getItem(pos));
     }
 
     @Override
     public void clear() {
         arrayAdapter.clear();
-        bindItemSet.clear();
     }
 
     @Override
-    public ListItem getItem(int position) {
-        return arrayAdapter.getItem(position);
+    public Data getData(int position) {
+        return arrayAdapter.getData(position);
     }
 
     @Override
@@ -122,8 +135,8 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
 
         ListItem item;
 
-        public InnerViewHolder(Context context, ViewGroup parent, ListItem item) {
-            super(LayoutInflater.from(context).inflate(item.onGetLayoutRes(), parent, false));
+        public InnerViewHolder(ViewGroup parent, ListItem item) {
+            super(mInflater.inflate(item.onGetLayoutRes(), parent, false));
             this.item = item;
             this.item.bindViews(itemView);
         }

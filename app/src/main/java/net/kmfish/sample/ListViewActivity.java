@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import net.kmfish.multitypelistviewadapter.BaseListAdapter;
+import net.kmfish.multitypelistviewadapter.Data;
 import net.kmfish.sample.listitem.LineListItem1;
 import net.kmfish.sample.listitem.LineListItem2;
 import net.kmfish.sample.model.ImageModel;
@@ -26,16 +27,16 @@ public class ListViewActivity extends Activity {
         listView = (ListView) findViewById(R.id.listview);
         adapter = new BaseListAdapter(2);
         listView.setAdapter(adapter);
-        setupAdapter();
+        setupAdapter(adapter);
     }
 
-    private void setupAdapter() {
+    private void setupAdapter(BaseListAdapter adapter) {
+        adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
+        adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
+
         adapter.setNotifyOnChange(false);
         for (int i = 0, len = 30; i < len; i++) {
-            LineListItem1 item1 = new LineListItem1(this, getTextModel(i));
-            LineListItem2 item2 = new LineListItem2(this, getImageModel(i));
-
-            adapter.addItem( i  % 2 == 0 ? item1 : item2);
+            adapter.addData( i  % 2 == 0 ? Data.create(getTextModel(i)) : Data.create(getImageModel(i)));
         }
         adapter.notifyDataSetChanged();
     }

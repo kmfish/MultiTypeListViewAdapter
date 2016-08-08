@@ -1,6 +1,6 @@
 package net.kmfish.sample.listitem;
 
-import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,10 +16,6 @@ public class LineListItem1 extends BaseListItem<TextModel> {
     TextView tvName;
     TextView tvDesc;
 
-    public LineListItem1(Context mContext, TextModel model) {
-        super(mContext, model);
-    }
-
     @Override
     public int onGetLayoutRes() {
         return R.layout.list_item1;
@@ -27,6 +23,7 @@ public class LineListItem1 extends BaseListItem<TextModel> {
 
     @Override
     public void bindViews(View convertView) {
+        Log.d("item1", "bindViews:" + convertView);
         tvName = (TextView) convertView.findViewById(R.id.text_name);
         tvDesc = (TextView) convertView.findViewById(R.id.text_desc);
     }
@@ -34,6 +31,7 @@ public class LineListItem1 extends BaseListItem<TextModel> {
     @Override
     public void updateView(TextModel model, int pos) {
         if (null != model) {
+            Log.d("item1", "updateView model:" + model + "pos:" + pos);
             tvName.setText(model.getName());
             tvDesc.setText(model.getDesc());
         }

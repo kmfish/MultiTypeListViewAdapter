@@ -1,6 +1,5 @@
 package net.kmfish.sample.listitem;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,10 +17,6 @@ public class LineListItem2 extends BaseListItem<ImageModel> {
     ImageView img;
     TextView text;
 
-    public LineListItem2(Context mContext, ImageModel model) {
-        super(mContext, model);
-    }
-
     @Override
     public int onGetLayoutRes() {
         return R.layout.list_item2;
@@ -29,8 +24,17 @@ public class LineListItem2 extends BaseListItem<ImageModel> {
 
     @Override
     public void bindViews(View convertView) {
+        Log.d("item2", "bindViews:" + convertView);
         img = (ImageView) convertView.findViewById(R.id.thumb);
         text = (TextView) convertView.findViewById(R.id.name);
+
+        // 可以在这里添加事件监听,通过getData,可以获得当前item绑定的data.
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("LineListItem2", "onTextClicked data:" + getData());
+            }
+        });
     }
 
     @Override

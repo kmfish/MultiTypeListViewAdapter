@@ -8,14 +8,10 @@ import android.content.Context;
 public abstract class BaseListItem<T> implements ListItem<T> {
 
     protected Context mContext;
-    protected boolean isSelected;
-    protected boolean isEnabled;
 
-    private T data;
+    protected T data;
 
-    public BaseListItem(Context mContext, T data) {
-        this.mContext = mContext;
-        this.data = data;
+    public BaseListItem() {
     }
 
     protected Context getContext() {
@@ -23,30 +19,17 @@ public abstract class BaseListItem<T> implements ListItem<T> {
     }
 
     @Override
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
-
-    @Override
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
-    }
-
-    @Override
-    public void setData(T data) {
-        this.data = data;
+    public void setContext(Context context) {
+        this.mContext = context;
     }
 
     @Override
     public T getData() {
         return data;
+    }
+
+    @Override
+    public void setData(T data) {
+        this.data = data;
     }
 }

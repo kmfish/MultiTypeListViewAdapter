@@ -1,21 +1,90 @@
 package net.kmfish.multitypelistviewadapter;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
 import java.util.List;
 
 /**
  * Created by kmfish on 2015/9/9
  */
-public class BaseListAdapter extends BaseMultiTypeAdapter implements CommonArrayAdapter.NotifyDataSetChangedListener {
+public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChangedListener, IArrayAdapter {
 
     public static final String TAG = BaseListAdapter.class.getSimpleName();
 
-    private CommonArrayAdapter arrayAdapter;
+    private BaseArrayAdapter arrayAdapter;
 
     private int typeCount;
 
+    private LayoutInflater mInflater;
+
+    private ListItemFactory itemFactory = new ClassListItemFactory();
+
     public BaseListAdapter(int typeCount) {
-        arrayAdapter = new CommonArrayAdapter(this);
+        init(typeCount);
+    }
+
+    private void init(int typeCount) {
+        arrayAdapter = new BaseArrayAdapter(this);
         this.typeCount = typeCount;
+    }
+
+    /**
+     * 初始化Adapter时调用此方法注册数据类型和Item类型的映射关系
+     * @param dataClz
+     * @param itemClz
+     */
+    public void registerDataAndItem(Class<?> dataClz, Class<? extends ListItem> itemClz) {
+        itemFactory.registerDataType(dataClz, itemClz);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (null == mInflater) {
+            mInflater = LayoutInflater.from(parent.getContext());
+        }
+
+        Data data = getData(position);
+        if (null == data || null == data.getData()) {
+            throw new RuntimeException("item data should not be null, pos:" + position);
+        }
+
+        Class rawClz = data.getData().getClass();
+        ListItem item;
+        if (null == convertView) {
+            item = createListItem(rawClz);
+            if (null != item) {
+                convertView = mInflater.inflate(item.onGetLayoutRes(), parent, false);
+                convertView.setTag(item);
+                item.setContext(parent.getContext());
+                item.bindViews(convertView);
+            }
+        } else {
+            item = (ListItem) convertView.getTag();
+        }
+
+        if (null != item) {
+            item.setData(data.getData());
+            item.updateView(data.getData(), position);
+        }
+        return convertView;
+    }
+
+    private ListItem createListItem(Class<?> dataClz) {
+        ListItem item = itemFactory.create(dataClz);
+        return item;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        Data item = getItem(position);
+        if (null != item) {
+            return item.isEnable();
+        }
+
+        return super.isEnabled(position);
     }
 
     @Override
@@ -39,32 +108,37 @@ public class BaseListAdapter extends BaseMultiTypeAdapter implements CommonArray
     }
 
     @Override
-    public ListItem getItem(int position) {
-        return arrayAdapter.getItem(position);
+    public Data getItem(int position) {
+        return arrayAdapter.getData(position);
     }
 
     @Override
-    public void addItem(ListItem item) {
-        arrayAdapter.addItem(item);
+    public Data getData(int position) {
+        return arrayAdapter.getData(position);
     }
 
     @Override
-    public void addItems(List<ListItem> items) {
-        arrayAdapter.addItems(items);
+    public void addData(Data item) {
+        arrayAdapter.addData(item);
     }
 
     @Override
-    public void addItems(ListItem... items) {
-        arrayAdapter.addItems(items);
+    public void addDatas(List<Data> items) {
+        arrayAdapter.addDatas(items);
     }
 
     @Override
-    public void insert(ListItem item, int index) {
+    public void addDatas(Data... items) {
+        arrayAdapter.addDatas(items);
+    }
+
+    @Override
+    public void insert(Data item, int index) {
         arrayAdapter.insert(item, index);
     }
 
     @Override
-    public void remove(ListItem object) {
+    public void remove(Data object) {
         arrayAdapter.remove(object);
     }
 
