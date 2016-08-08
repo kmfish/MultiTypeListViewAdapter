@@ -43,55 +43,69 @@ public class ListViewActivity extends Activity {
     private ListView listView;
     private BaseListAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new BaseListAdapter(2);
+        adapter = new BaseListAdapter();
+        adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
+        adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
+
         listView.setAdapter(adapter);
-        setupAdapter();
+        setupAdapter(adapter);
     }
 
-    private void setupAdapter() {
-        LineListItem1 item1 = new LineListItem1(this, getTextModel());
-        LineListItem2 item2 = new LineListItem2(this, getImageModel());
+    private void setupAdapter(BaseListAdapter adapter) {
 
         adapter.setNotifyOnChange(false);
-        for (int i = 0, len = 15; i < len; i++) {
-            adapter.addItem( i  % 2 == 0 ? item1 : item2);
+        for (int i = 0, len = 30; i < len; i++) {
+            adapter.addData( i  % 2 == 0 ? Data.create(getTextModel(i)) : Data.create(getImageModel(i)));
         }
         adapter.notifyDataSetChanged();
     }
+
+    private TextModel getTextModel(int i) {
+        return new TextModel("The name:" + i, "This is a desc text.");
+    }
+
+    private ImageModel getImageModel(int i) {
+        return new ImageModel("github:" + i, R.drawable.icon_git);
+    }
 }
 
-public class LineListItem1 extends BaseListItem<TextModel> {
+public class LineListItem2 extends BaseListItem<ImageModel> {
 
-    TextView tvName;
-    TextView tvDesc;
-
-    public LineListItem1(Context mContext, TextModel model) {
-        super(mContext, model);
-    }
+    ImageView img;
+    TextView text;
 
     @Override
     public int onGetLayoutRes() {
-        return R.layout.list_item1;
+        return R.layout.list_item2;
     }
 
     @Override
     public void bindViews(View convertView) {
-        tvName = (TextView) convertView.findViewById(R.id.text_name);
-        tvDesc = (TextView) convertView.findViewById(R.id.text_desc);
+        Log.d("item2", "bindViews:" + convertView);
+        img = (ImageView) convertView.findViewById(R.id.thumb);
+        text = (TextView) convertView.findViewById(R.id.name);
+
+        // 可以在这里添加事件监听,通过getData,可以获得当前item绑定的data.
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("LineListItem2", "onTextClicked data:" + getData());
+            }
+        });
     }
 
     @Override
-    public void updateView(TextModel model, int pos) {
+    public void updateView(ImageModel model, int pos) {
         if (null != model) {
-            tvName.setText(model.getName());
-            tvDesc.setText(model.getDesc());
+            Log.d("item2", "updateView model:" + model + "pos:" + pos);
+            text.setText(model.getName());
+            img.setImageResource(model.getImgResId());
         }
     }
 }
@@ -99,8 +113,8 @@ public class LineListItem1 extends BaseListItem<TextModel> {
 
 项目发布在github上了，欢迎fork和交流。
 
-部分实现参考了 [CommonAdapter](https://github.com/tianzhijiexian/CommonAdapter), 它的思路是数据和view分离,由adapter居中来组织.
-我封装的思路是以Item为中心,组织数据和视图,使用起来代码更简洁些.同时提供了ArrayAdapter的类似接口,方便数据的增减.
+部分实现参考了 [CommonAdapter](https://github.com/tianzhijiexian/CommonAdapter),
+,由于考虑到多type的场景下,必然data的类型也是多种的,所以支持了不同类型的data.另外item也可以持有当前显示的data对象,这样方便实现点击事件之后的需求. 同时提供了ArrayAdapter的类似接口,方便数据的增减.
 
 
 

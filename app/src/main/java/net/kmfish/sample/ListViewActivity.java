@@ -48,4 +48,5 @@ public class ListViewActivity extends Activity {
 
     private ImageModel getImageModel(int i) {
         return new ImageModel("github:" + i, R.drawable.icon_git);
-    }}
+    }
+}
