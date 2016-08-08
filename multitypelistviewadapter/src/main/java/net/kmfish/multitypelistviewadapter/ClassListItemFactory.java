@@ -32,4 +32,9 @@ public final class ClassListItemFactory implements ListItemFactory<Class> {
     public final void registerDataType(Class dataType, Class<? extends ListItem> itemClz) {
         dataItemMap.put(dataType, itemClz);
     }
+
+    @Override
+    public int getTypeCount() {
+        return dataItemMap.size();
+    }
 }

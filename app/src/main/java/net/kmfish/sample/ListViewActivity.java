@@ -25,14 +25,15 @@ public class ListViewActivity extends Activity {
         setContentView(R.layout.activity_list);
 
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new BaseListAdapter(2);
+        adapter = new BaseListAdapter();
+        adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
+        adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
+
         listView.setAdapter(adapter);
         setupAdapter(adapter);
     }
 
     private void setupAdapter(BaseListAdapter adapter) {
-        adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
-        adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
 
         adapter.setNotifyOnChange(false);
         for (int i = 0, len = 30; i < len; i++) {

@@ -10,4 +10,6 @@ public interface ListItemFactory<T> {
 
     void registerDataType(T dataType, Class<? extends ListItem> itemClz);
 
+    int getTypeCount();
+
 }

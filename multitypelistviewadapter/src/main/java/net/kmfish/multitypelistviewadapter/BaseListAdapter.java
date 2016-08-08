@@ -16,23 +16,21 @@ public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChanged
 
     private BaseArrayAdapter arrayAdapter;
 
-    private int typeCount;
-
     private LayoutInflater mInflater;
 
     private ListItemFactory itemFactory = new ClassListItemFactory();
 
-    public BaseListAdapter(int typeCount) {
-        init(typeCount);
+    public BaseListAdapter() {
+        init();
     }
 
-    private void init(int typeCount) {
+    private void init() {
         arrayAdapter = new BaseArrayAdapter(this);
-        this.typeCount = typeCount;
     }
 
     /**
      * 初始化Adapter时调用此方法注册数据类型和Item类型的映射关系
+     * 注意: 需要在setAdapter之前调用!!
      * @param dataClz
      * @param itemClz
      */
@@ -89,7 +87,13 @@ public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChanged
 
     @Override
     public int getViewTypeCount() {
-        return typeCount;
+        int count = itemFactory.getTypeCount();
+        if (0 == count) {
+            throw new RuntimeException(
+                    "registerDataAndItem() should be called before ListView.setAdapter(adapter)!");
+        }
+
+        return itemFactory.getTypeCount();
     }
 
     @Override
