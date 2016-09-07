@@ -48,9 +48,10 @@ public class ListViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        listView = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById
+        (R.id.listview);
         adapter = new BaseListAdapter();
-        adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
+        adapter.registerDataAndItem(TextModel.class, LineListItem1.class, item1ClickListener);
         adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
 
         listView.setAdapter(adapter);
@@ -73,40 +74,67 @@ public class ListViewActivity extends Activity {
     private ImageModel getImageModel(int i) {
         return new ImageModel("github:" + i, R.drawable.icon_git);
     }
+
+   private LineListItem1.OnItem1ClickListener item1ClickListener = new LineListItem1.OnItem1ClickListener() {
+        @Override
+        public void onNameClick(TextModel model) {
+            Log.d(TAG, "onNameClick() called with: " + "model = [" + model + "]");
+        }
+
+        @Override
+        public void onDescClick(TextModel model) {
+            Log.d(TAG, "onDescClick() called with: " + "model = [" + model + "]");
+        }
+   };
 }
 
-public class LineListItem2 extends BaseListItem<ImageModel> {
+public class LineListItem1 extends BaseListItem<TextModel, LineListItem1.OnItem1ClickListener> {
 
-    ImageView img;
-    TextView text;
+    TextView tvName;
+    TextView tvDesc;
 
     @Override
     public int onGetLayoutRes() {
-        return R.layout.list_item2;
+        return R.layout.list_item1;
     }
 
     @Override
     public void bindViews(View convertView) {
-        Log.d("item2", "bindViews:" + convertView);
-        img = (ImageView) convertView.findViewById(R.id.thumb);
-        text = (TextView) convertView.findViewById(R.id.name);
+        Log.d("item1", "bindViews:" + convertView);
+        tvName = (TextView) convertView.findViewById(R.id.text_name);
+        tvDesc = (TextView) convertView.findViewById(R.id.text_desc);
 
-        // 可以在这里添加事件监听,通过getData,可以获得当前item绑定的data.
-        text.setOnClickListener(new View.OnClickListener() {
+        tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("LineListItem2", "onTextClicked data:" + getData());
+                if (null != attachInfo) {
+                    attachInfo.onNameClick(getData());
+                }
             }
         });
+        tvDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != attachInfo) {
+                    attachInfo.onDescClick(getData());
+                }
+            }
+        });
+
     }
 
     @Override
-    public void updateView(ImageModel model, int pos) {
+    public void updateView(TextModel model, int pos) {
         if (null != model) {
-            Log.d("item2", "updateView model:" + model + "pos:" + pos);
-            text.setText(model.getName());
-            img.setImageResource(model.getImgResId());
+            Log.d("item1", "updateView model:" + model + "pos:" + pos);
+            tvName.setText(model.getName());
+            tvDesc.setText(model.getDesc());
         }
+    }
+
+    public interface OnItem1ClickListener {
+        void onNameClick(TextModel model);
+        void onDescClick(TextModel model);
     }
 }
 ```
