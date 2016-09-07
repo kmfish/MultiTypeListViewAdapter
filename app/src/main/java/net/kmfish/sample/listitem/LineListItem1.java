@@ -11,7 +11,7 @@ import net.kmfish.sample.model.TextModel;
 /**
  * Created by kmfish on 2015/9/9.
  */
-public class LineListItem1 extends BaseListItem<TextModel> {
+public class LineListItem1 extends BaseListItem<TextModel, LineListItem1.OnItem1ClickListener> {
 
     TextView tvName;
     TextView tvDesc;
@@ -26,6 +26,24 @@ public class LineListItem1 extends BaseListItem<TextModel> {
         Log.d("item1", "bindViews:" + convertView);
         tvName = (TextView) convertView.findViewById(R.id.text_name);
         tvDesc = (TextView) convertView.findViewById(R.id.text_desc);
+
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != attachInfo) {
+                    attachInfo.onNameClick(getData());
+                }
+            }
+        });
+        tvDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != attachInfo) {
+                    attachInfo.onDescClick(getData());
+                }
+            }
+        });
+
     }
 
     @Override
@@ -35,5 +53,10 @@ public class LineListItem1 extends BaseListItem<TextModel> {
             tvName.setText(model.getName());
             tvDesc.setText(model.getDesc());
         }
+    }
+
+    public interface OnItem1ClickListener {
+        void onNameClick(TextModel model);
+        void onDescClick(TextModel model);
     }
 }

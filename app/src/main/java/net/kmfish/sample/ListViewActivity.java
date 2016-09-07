@@ -2,6 +2,7 @@ package net.kmfish.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import net.kmfish.multitypelistviewadapter.BaseListAdapter;
@@ -16,6 +17,8 @@ import net.kmfish.sample.model.TextModel;
  */
 public class ListViewActivity extends Activity {
 
+    private static final String TAG = "ListViewActivity";
+
     private ListView listView;
     private BaseListAdapter adapter;
 
@@ -26,10 +29,16 @@ public class ListViewActivity extends Activity {
 
         listView = (ListView) findViewById(R.id.listview);
         adapter = new BaseListAdapter();
-        adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
+        adapter.registerDataAndItem(TextModel.class, LineListItem1.class, item1ClickListener);
         adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
 
         listView.setAdapter(adapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d(TAG, "onItemClick() called with: " + "parent = [" + parent + "], view = [" + view + "], position = [" + position + "], id = [" + id + "]");
+//            }
+//        });
         setupAdapter(adapter);
     }
 
@@ -49,4 +58,16 @@ public class ListViewActivity extends Activity {
     private ImageModel getImageModel(int i) {
         return new ImageModel("github:" + i, R.drawable.icon_git);
     }
+
+    private LineListItem1.OnItem1ClickListener item1ClickListener = new LineListItem1.OnItem1ClickListener() {
+        @Override
+        public void onNameClick(TextModel model) {
+            Log.d(TAG, "onNameClick() called with: " + "model = [" + model + "]");
+        }
+
+        @Override
+        public void onDescClick(TextModel model) {
+            Log.d(TAG, "onDescClick() called with: " + "model = [" + model + "]");
+        }
+    };
 }

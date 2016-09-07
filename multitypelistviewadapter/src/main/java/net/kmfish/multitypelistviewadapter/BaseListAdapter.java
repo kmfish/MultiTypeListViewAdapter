@@ -31,11 +31,30 @@ public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChanged
     /**
      * 初始化Adapter时调用此方法注册数据类型和Item类型的映射关系
      * 注意: 需要在setAdapter之前调用!!
-     * @param dataClz
-     * @param itemClz
+     * @param dataClz model class
+     * @param itemClz ListItem class
+     * @param <ModelType> model类型
+     * @param <AttachType> 附加对象类型
      */
-    public void registerDataAndItem(Class<?> dataClz, Class<? extends ListItem> itemClz) {
+    public <ModelType, AttachType> void registerDataAndItem(Class<ModelType> dataClz,
+                                                            Class<? extends ListItem<ModelType, AttachType>> itemClz) {
         itemFactory.registerDataType(dataClz, itemClz);
+    }
+
+    /**
+     * 初始化Adapter时调用此方法注册数据类型和Item类型的映射关系
+     * 注意: 需要在setAdapter之前调用!!
+     * @param dataClz model class
+     * @param itemClz ListItem class
+     * @param attachInfo 附加对象
+     * @param <ModelType> model类型
+     * @param <AttachType> 附加对象类型
+     */
+    public <ModelType, AttachType> void registerDataAndItem(Class<ModelType> dataClz,
+                                                            Class<? extends ListItem<ModelType, AttachType>> itemClz,
+                                                            AttachType attachInfo) {
+        itemFactory.registerDataType(dataClz, itemClz);
+        itemFactory.registerDataClickListener(dataClz, attachInfo);
     }
 
     @Override

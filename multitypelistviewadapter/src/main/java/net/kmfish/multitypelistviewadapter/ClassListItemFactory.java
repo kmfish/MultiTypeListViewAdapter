@@ -9,6 +9,7 @@ import java.util.Map;
 public final class ClassListItemFactory implements ListItemFactory<Class> {
 
     private final Map<Class<?>, Class<? extends ListItem>> dataItemMap = new HashMap<>();
+    private final Map<Class<?>, Object> dataItemAttachInfoMap = new HashMap<>();
 
 
     @Override
@@ -25,12 +26,21 @@ public final class ClassListItemFactory implements ListItemFactory<Class> {
             }
         }
 
+        if (item != null) {
+            item.setAttachInfo(dataItemAttachInfoMap.get(dataType));
+        }
+
         return item;
     }
 
     @Override
     public final void registerDataType(Class dataType, Class<? extends ListItem> itemClz) {
         dataItemMap.put(dataType, itemClz);
+    }
+
+    @Override
+    public void registerDataClickListener(Class dataType, Object attachInfo) {
+        dataItemAttachInfoMap.put(dataType, attachInfo);
     }
 
     @Override

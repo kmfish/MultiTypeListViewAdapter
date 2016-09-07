@@ -12,7 +12,7 @@ import net.kmfish.sample.model.ImageModel;
 /**
  * Created by kmfish on 2015/9/9.
  */
-public class LineListItem2 extends BaseListItem<ImageModel> {
+public class LineListItem2 extends BaseListItem<ImageModel, Void> {
 
     ImageView img;
     TextView text;

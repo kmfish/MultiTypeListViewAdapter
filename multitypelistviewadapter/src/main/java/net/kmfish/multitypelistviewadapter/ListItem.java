@@ -8,7 +8,7 @@ import android.view.View;
  * Created by kmfish on 2015/9/9
  * 列表的每一行的抽象接口
  */
-public interface ListItem<T> {
+public interface ListItem<T, L> {
 
     void setContext(Context context);
 
@@ -43,5 +43,7 @@ public interface ListItem<T> {
      * @param data
      */
     void setData(T data);
+
+    void setAttachInfo(L obj);
 
 }
