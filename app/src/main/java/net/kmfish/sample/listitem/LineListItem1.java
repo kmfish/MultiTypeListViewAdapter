@@ -16,6 +16,7 @@ public class LineListItem1 extends BaseListItem<TextModel, LineListItem1.OnItem1
     TextView tvName;
     TextView tvDesc;
 
+
     @Override
     public int onGetLayoutRes() {
         return R.layout.list_item1;

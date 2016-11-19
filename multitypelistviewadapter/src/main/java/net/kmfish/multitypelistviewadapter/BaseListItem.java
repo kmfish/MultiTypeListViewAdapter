@@ -4,6 +4,8 @@ import android.content.Context;
 
 /**
  * Created by kmfish on 2015/9/9.
+ *
+ * Subclass extends this class must has a empty constructor method.
  */
 public abstract class BaseListItem<T, L> implements ListItem<T, L> {
 

@@ -7,9 +7,12 @@ import android.support.v7.widget.RecyclerView;
 
 import net.kmfish.multitypelistviewadapter.BaseRecyclerAdapter;
 import net.kmfish.multitypelistviewadapter.Data;
+import net.kmfish.sample.listitem.AbsLineItem;
 import net.kmfish.sample.listitem.LineListItem1;
 import net.kmfish.sample.listitem.LineListItem2;
+import net.kmfish.sample.model.AbsModel;
 import net.kmfish.sample.model.ImageModel;
+import net.kmfish.sample.model.SubModel;
 import net.kmfish.sample.model.TextModel;
 
 /**
@@ -38,12 +41,15 @@ public class RecyclerViewActivity extends Activity {
     private void setupAdapter(BaseRecyclerAdapter adapter) {
         adapter.registerDataAndItem(TextModel.class, LineListItem1.class);
         adapter.registerDataAndItem(ImageModel.class, LineListItem2.class);
+        adapter.registerDataAndItem(AbsModel.class, AbsLineItem.class);
 
         adapter.setNotifyOnChange(false);
-        for (int i = 0, len = 30; i < len; i++) {
+        for (int i = 0, len = 10; i < len; i++) {
             adapter.addData( i  % 2 == 0 ? Data.create(getTextModel(i)) : Data.create(getImageModel(i)));
         }
         adapter.notifyDataSetChanged();
+
+        adapter.addData(Data.create(new SubModel())); // SubModel extends AbsModel
     }
 
     private TextModel getTextModel(int i) {

@@ -15,7 +15,15 @@ public final class ClassListItemFactory implements ListItemFactory<Class> {
     @Override
     public final ListItem create(Class dataType) {
         ListItem item = null;
-        Class<? extends ListItem> itemClz = dataItemMap.get(dataType);
+        Class<? extends ListItem> itemClz = null;
+
+        // the dataType maybe is a sub class extends the key class(or implements interface) of dataItemMap
+        for (Map.Entry<Class<?>, Class<? extends ListItem>> entry : dataItemMap.entrySet()) {
+            if (entry.getKey().isAssignableFrom(dataType)) {
+                itemClz = entry.getValue();
+            }
+        }
+
         if (null != itemClz) {
             try {
                 item = itemClz.newInstance();
@@ -28,6 +36,8 @@ public final class ClassListItemFactory implements ListItemFactory<Class> {
 
         if (item != null) {
             item.setAttachInfo(dataItemAttachInfoMap.get(dataType));
+        } else {
+            System.err.println("Can not create ListItem.");
         }
 
         return item;
