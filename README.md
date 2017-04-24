@@ -39,7 +39,7 @@ dependencies {
 ## Example
 - [For ListView](https://github.com/kmfish/MultiTypeListViewAdapter/blob/master/app/src/main/java/net/kmfish/sample/ListViewActivity.java)
 - [For RecyclerView](https://github.com/kmfish/MultiTypeListViewAdapter/blob/master/app/src/main/java/net/kmfish/sample/RecyclerViewActivity.java)
-
+- [LineListItem1](https://github.com/kmfish/MultiTypeListViewAdapter/blob/master/app/src/main/java/net/kmfish/sample/listitem/LineListItem1.java)
 
 ## 参考
 部分实现参考了 [CommonAdapter](https://github.com/tianzhijiexian/CommonAdapter),
