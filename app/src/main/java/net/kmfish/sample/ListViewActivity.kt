@@ -23,8 +23,8 @@ class ListViewActivity : Activity() {
 
         val listView = findViewById(R.id.listview) as ListView
         val adapter = BaseListAdapter()
-        adapter.registerDataAndItem<TextModel, LineListItem1.OnItem1ClickListener>(TextModel::class.java, LineListItem1::class.java, item1ClickListener)
-        adapter.registerDataAndItem<ImageModel, Void>(ImageModel::class.java, LineListItem2::class.java)
+        adapter.registerDataAndItem(TextModel::class.java, LineListItem1::class.java, item1ClickListener)
+        adapter.registerDataAndItem(ImageModel::class.java, LineListItem2::class.java)
 
         listView.adapter = adapter
         //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

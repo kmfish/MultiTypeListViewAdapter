@@ -26,24 +26,22 @@ class LineListItem1 : BaseListItem<TextModel, LineListItem1.OnItem1ClickListener
         tvDesc = convertView.findViewById(R.id.text_desc) as TextView
 
         tvName.setOnClickListener {
-            if (null != attachInfo) {
-                attachInfo.onNameClick(getData())
+            if (null != attachInfo && null != data) {
+                (attachInfo as OnItem1ClickListener).onNameClick(data as TextModel)
             }
         }
         tvDesc.setOnClickListener {
-            if (null != attachInfo) {
-                attachInfo.onDescClick(getData())
+            if (null != attachInfo && null != data) {
+                (attachInfo as OnItem1ClickListener).onDescClick(data as TextModel)
             }
         }
 
     }
 
-    override fun updateView(model: TextModel?, pos: Int) {
-        if (null != model) {
-            Log.d("item1", "updateView model:" + model + "pos:" + pos)
-            tvName.text = model.name
-            tvDesc.text = model.desc
-        }
+    override fun updateView(data: TextModel, pos: Int) {
+        Log.d("item1", "updateView model:" + data + "pos:" + pos)
+        tvName.text = data.name
+        tvDesc.text = data.desc
     }
 
     interface OnItem1ClickListener {

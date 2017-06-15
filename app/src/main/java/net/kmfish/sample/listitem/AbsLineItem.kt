@@ -11,7 +11,7 @@ import net.kmfish.sample.model.AbsModel
  * Created by lijun on 16/11/19.
  */
 
-class AbsLineItem : BaseListItem<AbsModel, Void>() {
+class AbsLineItem : BaseListItem<AbsModel, Any>() {
 
     private lateinit var tvName: TextView
 

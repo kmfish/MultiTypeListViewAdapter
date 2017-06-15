@@ -12,7 +12,7 @@ import net.kmfish.sample.model.ImageModel
 /**
  * Created by kmfish on 2015/9/9.
  */
-class LineListItem2 : BaseListItem<ImageModel, Void>() {
+class LineListItem2 : BaseListItem<ImageModel, Any>() {
 
     private lateinit var img: ImageView
     private lateinit var text: TextView
@@ -27,14 +27,12 @@ class LineListItem2 : BaseListItem<ImageModel, Void>() {
         text = convertView.findViewById(R.id.name) as TextView
 
         // 可以在这里添加事件监听,通过getData,可以获得当前item绑定的data.
-        text.setOnClickListener { Log.d("LineListItem2", "onTextClicked data:" + getData()) }
+        text.setOnClickListener { Log.d("LineListItem2", "onTextClicked data:" + data) }
     }
 
-    override fun updateView(model: ImageModel?, pos: Int) {
-        if (null != model) {
-            Log.d("item2", "updateView model:" + model + "pos:" + pos)
-            text.text = model.name
-            img.setImageResource(model.imgResId)
-        }
+    override fun updateView(data: ImageModel, pos: Int) {
+        Log.d("item2", "updateView model:" + data + "pos:" + pos)
+        text.text = data.name
+        img.setImageResource(data.imgResId)
     }
 }

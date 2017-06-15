@@ -38,9 +38,9 @@ class RecyclerViewActivity : Activity() {
     }
 
     private fun setupAdapter(adapter: BaseRecyclerAdapter) {
-        adapter.registerDataAndItem<TextModel, LineListItem1.OnItem1ClickListener>(TextModel::class.java, LineListItem1::class.java)
-        adapter.registerDataAndItem<ImageModel, Void>(ImageModel::class.java, LineListItem2::class.java)
-        adapter.registerDataAndItem<AbsModel, Void>(AbsModel::class.java, AbsLineItem::class.java)
+        adapter.registerDataAndItem(TextModel::class.java, LineListItem1::class.java)
+        adapter.registerDataAndItem(ImageModel::class.java, LineListItem2::class.java)
+        adapter.registerDataAndItem(AbsModel::class.java, AbsLineItem::class.java)
 
         adapter.setNotifyOnChange(false)
         var i = 0
