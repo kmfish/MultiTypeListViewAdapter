@@ -67,7 +67,7 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
             mInflater = LayoutInflater.from(parent.getContext());
         }
 
-        Class<? extends Data> dataClz = arrayAdapter.getDataClass(viewType);
+        Class<?> dataClz = arrayAdapter.getDataClass(viewType);
         if (null == dataClz) {
             return null;
         }

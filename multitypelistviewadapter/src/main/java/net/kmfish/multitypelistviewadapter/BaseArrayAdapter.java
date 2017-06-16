@@ -110,7 +110,7 @@ public class BaseArrayAdapter implements IArrayAdapter {
         return Collections.unmodifiableList(datas);
     }
 
-    public Class<? extends Data> getDataClass(int viewType) {
+    public Class<?> getDataClass(int viewType) {
         return helper.getItemClass(viewType);
     }
 
