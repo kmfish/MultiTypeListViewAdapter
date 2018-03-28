@@ -142,8 +142,23 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter implements IArrayA
     }
 
     @Override
+    public List<Data> getDatas() {
+        return arrayAdapter.getDatas();
+    }
+
+    @Override
     public Data getData(int position) {
         return arrayAdapter.getData(position);
+    }
+
+    @Override
+    public int getItemType(int position) {
+        return arrayAdapter.getItemType(position);
+    }
+
+    @Override
+    public int getCount() {
+        return arrayAdapter.getCount();
     }
 
     @Override

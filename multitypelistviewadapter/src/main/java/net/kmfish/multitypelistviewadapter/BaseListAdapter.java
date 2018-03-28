@@ -14,7 +14,7 @@ public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChanged
 
     public static final String TAG = BaseListAdapter.class.getSimpleName();
 
-    private BaseArrayAdapter arrayAdapter;
+    private IArrayAdapter arrayAdapter;
 
     private LayoutInflater mInflater;
 
@@ -141,6 +141,11 @@ public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChanged
     }
 
     @Override
+    public int getItemType(int position) {
+        return arrayAdapter.getItemType(position);
+    }
+
+    @Override
     public void addData(Data item) {
         arrayAdapter.addData(item);
     }
@@ -173,6 +178,11 @@ public class BaseListAdapter extends BaseAdapter implements NotifyDataSetChanged
     @Override
     public void clear() {
         arrayAdapter.clear();
+    }
+
+    @Override
+    public List<Data> getDatas() {
+        return arrayAdapter.getDatas();
     }
 
     @Override

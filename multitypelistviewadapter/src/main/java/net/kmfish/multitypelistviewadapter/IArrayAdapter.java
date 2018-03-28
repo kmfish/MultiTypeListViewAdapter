@@ -21,9 +21,15 @@ public interface IArrayAdapter {
 
     void clear();
 
+    List<Data> getDatas();
+
     void setNotifyOnChange(boolean notifyOnChange);
 
     void notifyDataSetChanged();
 
     Data getData(int position);
+
+    int getItemType(int position);
+
+    int getCount();
 }

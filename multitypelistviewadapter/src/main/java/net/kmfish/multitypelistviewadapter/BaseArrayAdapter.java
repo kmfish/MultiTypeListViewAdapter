@@ -1,5 +1,7 @@
 package net.kmfish.multitypelistviewadapter;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,13 +14,17 @@ public class BaseArrayAdapter implements IArrayAdapter {
     public static final String TAG = BaseArrayAdapter.class.getSimpleName();
 
     private boolean mNotifyOnChange = true;
+    @NonNull
     private final Object mLock = new Object();
-    private List<Data> datas = new ArrayList<>();
 
-    private ListItemTypeHelper helper = new ListItemTypeHelper();
+    @NonNull
+    private final List<Data> datas = new ArrayList<>();
+
+    @NonNull
+    private final ListItemTypeHelper helper = new ListItemTypeHelper();
     private NotifyDataSetChangedListener listener;
 
-    public BaseArrayAdapter(NotifyDataSetChangedListener listener) {
+    BaseArrayAdapter(NotifyDataSetChangedListener listener) {
         this.listener = listener;
     }
 
@@ -81,6 +87,11 @@ public class BaseArrayAdapter implements IArrayAdapter {
     }
 
     @Override
+    public List<Data> getDatas() {
+        return Collections.unmodifiableList(datas);
+    }
+
+    @Override
     public void notifyDataSetChanged() {
         mNotifyOnChange = true;
         if (null != listener) {
@@ -93,8 +104,19 @@ public class BaseArrayAdapter implements IArrayAdapter {
         mNotifyOnChange = notifyOnChange;
     }
 
+    @Override
     public int getCount() {
         return datas.size();
+    }
+
+    @Override
+    public int getItemType(int position) {
+        Data item = getData(position);
+        if (null != item) {
+            return getItemType(item);
+        }
+
+        return -1;
     }
 
     @Override
@@ -106,24 +128,12 @@ public class BaseArrayAdapter implements IArrayAdapter {
         return null;
     }
 
-    public List<Data> getItems() {
-        return Collections.unmodifiableList(datas);
-    }
-
-    public Class<?> getDataClass(int viewType) {
+    Class<?> getDataClass(int viewType) {
         return helper.getItemClass(viewType);
     }
 
-    public int getItemType(int position) {
-        Data item = getData(position);
-        if (null != item) {
-            return getItemType(item);
-        }
 
-        return -1;
-    }
-
-    public int getItemType(Data data) {
+    private int getItemType(Data data) {
         if (null != data && null != data.getData()) {
             return helper.getType(data.getData().getClass());
         }

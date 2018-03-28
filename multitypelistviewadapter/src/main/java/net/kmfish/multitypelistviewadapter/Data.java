@@ -14,7 +14,7 @@ public class Data<T> {
     }
 
     public static <E> Data<E> create(E t) {
-        Data data = new Data();
+        Data<E> data = new Data<>();
         data.setData(t);
         return data;
     }
